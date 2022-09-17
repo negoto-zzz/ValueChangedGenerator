@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
@@ -35,7 +35,9 @@ namespace ValueChangedGenerator
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             // Find the type declaration identified by the diagnostic.
-            if (root.FindToken(diagnosticSpan.Start).Parent is not { } parent) return;
+            var parent = root.FindToken(diagnosticSpan.Start).Parent;
+            if (parent is null) return;
+
             var declaration = parent.AncestorsAndSelf().OfType<ClassDeclarationSyntax>().First();
 
             // Register a code action that will invoke the fix.
@@ -58,12 +60,12 @@ namespace ValueChangedGenerator
         {
             var newTypeDecl = typeDecl.AddPartialModifier();
 
-            if (await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false) is not CompilationUnitSyntax root) return document;
+            if (!(await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false) is CompilationUnitSyntax root)) return document;
 
-            var newRoolt = root.ReplaceNode(typeDecl, newTypeDecl)
+            var newRoot = root.ReplaceNode(typeDecl, newTypeDecl)
                 .WithAdditionalAnnotations(Formatter.Annotation);
 
-            document = document.WithSyntaxRoot(newRoolt);
+            document = document.WithSyntaxRoot(newRoot);
             return document;
         }
 
@@ -112,7 +114,7 @@ namespace ValueChangedGenerator
                 topDecl = newClassDecl;
             }
 
-            if (await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false) is not CompilationUnitSyntax root) return CompilationUnit();
+            if (!(await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false) is CompilationUnitSyntax root)) return CompilationUnit();
 
             return CompilationUnit().AddUsings(WithComponentModel(root.Usings))
                 .AddMembers(topDecl)

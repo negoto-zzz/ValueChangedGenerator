@@ -1,4 +1,4 @@
-# ValueChangedGenerator
+# ValueChangedGenerator (VS2017)
 
 A Roslyn Code Fix provider for generating PropertyChanged from inner struct members.
 
@@ -8,10 +8,6 @@ Code Fix version (C# 6.0)
 
 - VSIX: https://visualstudiogallery.msdn.microsoft.com/bf5dbce2-b73d-4f5f-8e1c-0e1de386b7ce
 - NuGet: https://www.nuget.org/packages/ValueChangedGenerator/
-
-Source Generator version (C# 9.0)
-
-- NuGet: https://www.nuget.org/packages/ValueChangedGenerator.SourceGenerator/
 
 ## Usage
 

@@ -19,7 +19,7 @@ namespace ValueChangedGenerator
         private static readonly LocalizableString Description = new LocalizableResourceString(nameof(Resources.AnalyzerDescription), Resources.ResourceManager, typeof(Resources));
         private const string Category = "Naming";
 
-        private static readonly DiagnosticDescriptor Rule = new(DiagnosticId, Title, MessageFormat, Category, DiagnosticSeverity.Info, isEnabledByDefault: true, description: Description);
+        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, MessageFormat, Category, DiagnosticSeverity.Info, isEnabledByDefault: true, description: Description);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(Rule); } }
 
@@ -32,7 +32,7 @@ namespace ValueChangedGenerator
 
         private void AnalyzerSyntax(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is not StructDeclarationSyntax s) return;
+            if (!(context.Node is StructDeclarationSyntax s)) return;
 
             var parent = s.FirstAncestorOrSelf<ClassDeclarationSyntax>();
 
